@@ -1,0 +1,73 @@
+
+let src = document.getElementsByClassName("userprof")[0].getElementsByTagName("img")[0].getAttribute("src");
+let src2 = src.indexOf("icon_") + 5;
+let myIcon = src.substring(src2).replace(".png","");
+console.log(myIcon);
+let myName = document.getElementsByClassName("profname")[0].innerText;
+console.log(myName);
+
+let talks = document.getElementById("talks").getElementsByClassName("talk");
+// 最初のputFlgを設定
+for (i = 0; i < talks.length; i++) {
+    let dd = talks[i].getElementsByTagName("dd")[0];
+    if (dd != undefined && dd.dataset.putFlg == undefined) {
+        dd.dataset.putFlg = "1";
+    }
+}
+
+lastOutput = "";
+window.setInterval(function () {
+    
+    let retrunValue = "";
+    let tarTal;
+    let preTarTal;
+
+    for (i = 0; i < talks.length; i++) {
+        let dd = talks[i].getElementsByTagName("dd")[0];
+        if (dd != undefined) {
+            const gi = getIconName(dd);
+            const gn = getName(dd);
+            if (dd.dataset.putFlg == undefined) {
+                if (myIcon == gi || myName == gn) {
+                    lastOutput = dd.getElementsByTagName("div")[0].getElementsByTagName("p")[0].innerText;
+                    break;
+                }
+            }
+        } 
+    }
+    
+    for (i = 0; i < talks.length; i++) {
+        let dd = talks[i].getElementsByTagName("dd")[0];
+        if (dd != undefined) {
+            const gi = getIconName(dd);
+            const gn = getName(dd);
+            if (dd.dataset.putFlg == undefined) {
+                if (myIcon != gi || myName != gn) {
+                    tarTal = talks[i];
+                    lastMsg = dd.getElementsByTagName("div")[0].getElementsByTagName("p")[0].innerText;
+                    retrunValue = lastMsg;
+                }
+            } else {
+                break;
+            }
+        } 
+    }
+    
+    tarTal.getElementsByTagName("dd")[0].dataset.putFlg = "1";
+//    let dd = talks[i].getElementsByTagName("dd")[0];
+//     console.log(getName(dd));
+    if (lastMsg != lastOutput) {
+        console.log("出力：" + lastMsg);
+         bk = document.getElementsByTagName("textarea")[0].value;
+         document.getElementsByTagName("textarea")[0].value = lastMsg;
+         document.getElementsByName("post")[1].click();
+         document.getElementsByTagName("textarea")[0].value = bk;
+    }
+}, 750);
+
+function getIconName (dd) {
+    return dd.parentNode.classList[1];
+}
+function getName (dd) {
+    return dd.previousElementSibling.innerText;
+}
