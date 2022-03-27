@@ -1,0 +1,29 @@
+
+let src = document.getElementsByClassName("userprof")[0].getElementsByTagName("img")[0].getAttribute("src");
+let src2 = src.indexOf("icon_") + 5;
+let myIcon = src.substring(src2).replace(".png","");
+let myName = document.getElementsByClassName("profname")[0].innerText;
+document.getElementsByClassName("body")[0].classList.add("comp");
+let lastMessage = "";
+window.setInterval(function action () {
+    for (let i = 0; i < document.getElementsByClassName("body").length; i++) {
+        if (document.getElementsByClassName("body")[i]　 == document.getElementsByClassName("comp")[0] && i > 0) {
+            const body = document.getElementsByClassName("body")[i - 1];
+            body.classList.add("comp");
+            const name = body.parentNode.parentNode.previousElementSibling.innerText;
+            const icon = body.parentNode.parentNode.parentNode.classList[1];
+            const message = body.innerText;
+            if (myIcon == icon && myName == name) {
+                lastMessage = message;
+                action();
+            } else {
+                console.log(message);
+                const bk = document.getElementsByTagName("textarea")[0].value;
+                document.getElementsByTagName("textarea")[0].value = message;
+                document.getElementsByName("post")[1].click();
+                document.getElementsByTagName("textarea")[0].value = bk;
+            }
+            break;
+        }
+    }
+}, 500);
